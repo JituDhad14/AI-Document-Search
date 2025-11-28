@@ -1,0 +1,19 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.env
+
+# Node / frontend
+ai-doc-frontend/node_modules/
+dist/
+build/
+npm-debug.log
+yarn-error.log
+
+# IDE / OS
+.vscode/
+.DS_Store
+
+# Misc
+*.log

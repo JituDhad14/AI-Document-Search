@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-slate-950 text-slate-50;
+}
+
+/* typing dots used in the thinking bubble */
+@keyframes dotBounce {
+  0% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-6px); opacity: 1; }
+  80% { transform: translateY(0); opacity: 0.6; }
+  100% { transform: translateY(0); opacity: 0.4; }
+}
+
+.dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #34d399; /* emerald-400 */
+  border-radius: 9999px;
+  margin-right: 6px;
+  animation: dotBounce 1s infinite ease-in-out;
+}
+
+.dot.delay-1 {
+  animation-delay: 0.15s;
+}
+.dot.delay-2 {
+  animation-delay: 0.3s;
+}
+
+/* small cosmetic improvements for message pills */
+.message-pill {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
