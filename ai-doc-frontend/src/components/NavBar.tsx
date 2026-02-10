@@ -16,7 +16,7 @@ export const NavBar: React.FC = () => {
     <nav className="w-full border-b border-slate-800 bg-slate-900/60 backdrop-blur px-6 py-4 flex items-center justify-between">
       <div>
         <Link to="/" className="text-xl font-extrabold tracking-tight text-emerald-300">
-          Cognitive Assistant
+          AI Document Search
         </Link>
         <div className="text-xs text-slate-400">Search smarter, work faster</div>
       </div>

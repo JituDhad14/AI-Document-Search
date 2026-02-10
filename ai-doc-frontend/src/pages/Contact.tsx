@@ -11,7 +11,7 @@ export const Contact: React.FC = () => {
 
   const FAQ = [
     {
-      q: "How does the Cognitive Assistant work?",
+      q: "How does the AI Document Search work?",
       a: "It uses Retrieval-Augmented Generation (RAG): document chunks are embedded, stored in FAISS, retrieved based on similarity, and passed into an LLM to generate responses."
     },
     {
@@ -32,25 +32,48 @@ export const Contact: React.FC = () => {
     e.preventDefault();
     setNotice(null);
 
+    // Validation
     if (!name || !email || !message) {
       setNotice({ type: "err", text: "Please fill name, email and message." });
       return;
     }
+
     if (!/\S+@\S+\.\S+/.test(email)) {
       setNotice({ type: "err", text: "Please enter a valid email." });
       return;
     }
 
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 600));
-    setLoading(false);
 
-    setNotice({ type: "ok", text: "Your message has been submitted. We will reach out soon." });
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/feedback`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, subject, message }),
+      });
 
-    setName("");
-    setEmail("");
-    setSubject("General");
-    setMessage("");
+      if (!res.ok) throw new Error("Failed to submit feedback");
+
+      setNotice({
+        type: "ok",
+        text: "Your message has been submitted. Thank you!",
+      });
+
+      // Reset form
+      setName("");
+      setEmail("");
+      setSubject("General");
+      setMessage("");
+
+    } catch (err) {
+      console.error(err);
+      setNotice({
+        type: "err",
+        text: "Something went wrong. Please try again later.",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -60,13 +83,14 @@ export const Contact: React.FC = () => {
         {/* LEFT — CONTACT FORM */}
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
           <h2 className="text-2xl font-bold text-emerald-300 mb-2">
-            Facing Issues or need any help?
+            Facing issues or need help?
           </h2>
           <p className="text-slate-300 mb-4">
             Feel free to contact us — we value your feedback.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+
             <div>
               <label className="text-sm text-slate-400 block mb-1">Your name</label>
               <input
@@ -97,7 +121,6 @@ export const Contact: React.FC = () => {
                 <option>General</option>
                 <option>Bug Report</option>
                 <option>Feature Request</option>
-                <option>Account / Login</option>
                 <option>Other</option>
               </select>
             </div>
@@ -135,7 +158,7 @@ export const Contact: React.FC = () => {
           </form>
         </div>
 
-        {/* RIGHT — FAQ SECTION */}
+        {/* RIGHT — FAQ */}
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6">
           <h3 className="text-xl font-semibold text-emerald-300 mb-3">
             Frequently Asked Questions
@@ -144,7 +167,7 @@ export const Contact: React.FC = () => {
           <div className="space-y-2">
             {FAQ.map((f, i) => (
               <details key={i} className="group border border-slate-800 rounded-md">
-                <summary className="cursor-pointer select-none px-4 py-3 bg-slate-900 flex items-center justify-between">
+                <summary className="cursor-pointer px-4 py-3 bg-slate-900 flex justify-between">
                   <span className="text-slate-200">{f.q}</span>
                   <span className="text-slate-400 group-open:rotate-180 transition-transform">
                     ▾
@@ -158,9 +181,10 @@ export const Contact: React.FC = () => {
           </div>
 
           <div className="mt-6 text-xs text-slate-500">
-            Your feedback helps us improve Cognitive Assistant.
+            Your feedback helps us improve AI Document Search.
           </div>
         </div>
+
       </div>
     </div>
   );

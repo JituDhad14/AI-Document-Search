@@ -1,7 +1,18 @@
 # Python
+venv/
 .venv/
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# Database
+*.db
+
+# Uploaded data + FAISS index
+app/data/
+
+# Env files
 .env
 
 # Node / frontend
@@ -15,5 +26,5 @@ yarn-error.log
 .vscode/
 .DS_Store
 
-# Misc
+# Logs
 *.log

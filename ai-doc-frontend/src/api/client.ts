@@ -25,6 +25,7 @@ export type DocumentMeta = {
 export interface ChatRequest {
   query: string;
   k?: number;
+  document?: string | null;
 }
 
 export interface ChatResponse {
@@ -53,6 +54,28 @@ export async function uploadDocuments(files: File[]): Promise<any[]> {
   }
 
   return results;
+}
+export async function submitFeedback(payload: {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}) {
+  const API = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
+  const res = await fetch(`${API}/api/feedback`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to submit feedback");
+  }
+
+  return res.json();
 }
 
 /**

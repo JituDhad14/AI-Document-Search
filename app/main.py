@@ -3,6 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 # Import the routes using a specific alias
 from app.backend.api import routes as api_routes
+from app.backend.db.database import Base, engine
+from app.backend.db import models
+
+Base.metadata.create_all(bind=engine)
+
 
 app = FastAPI(title="RAG Doc Search API")
 

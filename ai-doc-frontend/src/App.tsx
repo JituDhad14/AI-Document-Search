@@ -102,7 +102,6 @@ const ChatLayout: React.FC = () => {
           <h1 className="text-lg font-semibold">AI Document Search & Chat</h1>
           <p className="text-xs text-slate-400">RAG over your PDFs • FastAPI + FAISS + Gemini</p>
         </div>
-        <span className="text-xs text-slate-500">API: {import.meta.env.VITE_API_URL || "http://localhost:8000/api"}</span>
       </header>
 
       <div className="flex flex-1 overflow-hidden">
@@ -124,17 +123,35 @@ const ChatLayout: React.FC = () => {
                   const selected = selectedDocIds.includes(d.id);
                   return (
                     <li
-                      key={d.id}
-                      onClick={() => toggleDocSelection(d.id)}
-                      className={`flex items-center justify-between rounded-md border px-2 py-1 cursor-pointer ${
-                        selected ? "border-emerald-500 bg-emerald-500/10" : "border-slate-800 hover:border-slate-600"
-                      }`}
-                    >
-                      <div className="flex flex-col">
-                        <span className="truncate max-w-[180px]">{d.name}</span>
-                        {typeof d.chunks === "number" && <span className="text-[10px] text-slate-500">{d.chunks} chunks</span>}
-                      </div>
-                    </li>
+  key={d.id}
+  className={`flex items-center justify-between rounded-md border px-2 py-1 group ${
+    selected ? "border-emerald-500 bg-emerald-500/10" : "border-slate-800 hover:border-slate-600"
+  }`}
+>
+  <div
+    className="flex flex-col cursor-pointer flex-1"
+    onClick={() => toggleDocSelection(d.id)}
+  >
+    <span className="truncate max-w-[180px]">{d.name}</span>
+    {typeof d.chunks === "number" && (
+      <span className="text-[10px] text-slate-500">
+        {d.chunks} chunks
+      </span>
+    )}
+  </div>
+
+  {/* hover actions */}
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      handleDeleteDocument(d.id);
+    }}
+    className="opacity-0 group-hover:opacity-100 text-[10px] px-2 py-1 rounded bg-red-600 hover:bg-red-700 ml-2"
+  >
+    Delete
+  </button>
+</li>
+
                   );
                 })}
               </ul>
@@ -144,11 +161,7 @@ const ChatLayout: React.FC = () => {
 
         <main className="flex-1 bg-slate-950 flex">
           {/* Pass documents + onDeleteDocument to ChatPanel (keeps existing props) */}
-          <ChatPanel
-            selectedDocIds={selectedDocIds}
-            documents={docs.map((d) => ({ id: d.id, name: d.name, file_url: d.file_url }))}
-            onDeleteDocument={handleDeleteDocument}
-          />
+          <ChatPanel selectedDocIds={selectedDocIds} />
         </main>
       </div>
     </div>
